@@ -1,9 +1,9 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useTranslation } from 'react-i18next';
 
-export default function VerifyPage() {
+function VerifyForm() {
   const { t } = useTranslation();
   const [code, setCode] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -138,5 +138,32 @@ export default function VerifyPage() {
         </form>
       </div>
     </div>
+  );
+}
+
+// Loading fallback component
+function VerifyLoading() {
+  return (
+    <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md w-full space-y-8">
+        <div>
+          <h2 className="mt-6 text-center text-3xl font-extrabold text-text">
+            Enter verification code
+          </h2>
+          <div className="mt-8 space-y-6 animate-pulse">
+            <div className="h-10 bg-gray-200 rounded-lg w-full"></div>
+            <div className="h-10 bg-gray-200 rounded-lg w-full"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default function VerifyPage() {
+  return (
+    <Suspense fallback={<VerifyLoading />}>
+      <VerifyForm />
+    </Suspense>
   );
 } 

@@ -156,9 +156,9 @@ const resources = {
 
 let isInitialized = false;
 
-const initI18next = async () => {
+export async function initI18n() {
   if (isInitialized) {
-    return;
+    return i18next;
   }
 
   await i18next
@@ -183,9 +183,12 @@ const initI18next = async () => {
     });
 
   isInitialized = true;
-};
+  return i18next;
+}
 
 // Initialize i18next
-initI18next();
+if (typeof window !== 'undefined') {
+  initI18n();
+}
 
 export default i18next; 
