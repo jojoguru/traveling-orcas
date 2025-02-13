@@ -51,6 +51,7 @@ export default function LoginPage() {
       window.location.href = '/auth/verify';
     } catch (err) {
       setError(t('errors.auth.unknown'));
+      console.error('Login error:', err);
     } finally {
       setIsLoading(false);
     }

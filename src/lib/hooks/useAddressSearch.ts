@@ -2,6 +2,26 @@ import { useState, useCallback } from 'react';
 import { GeocodingResult } from '../types/geocoding';
 import debounce from 'lodash/debounce';
 
+interface NominatimAddress {
+  road?: string;
+  house_number?: string;
+  city?: string;
+  town?: string;
+  village?: string;
+  state?: string;
+  country?: string;
+}
+
+interface NominatimResponse {
+  place_id: number;
+  lat: string;
+  lon: string;
+  display_name: string;
+  type: string;
+  importance: number;
+  address: NominatimAddress;
+}
+
 export function useAddressSearch() {
   const [suggestions, setSuggestions] = useState<GeocodingResult[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -10,7 +30,7 @@ export function useAddressSearch() {
     setSuggestions([]);
   }, []);
 
-  const formatDisplayName = (address: any): string => {
+  const formatDisplayName = useCallback((address: NominatimAddress): string => {
     const parts = [];
     
     // Add road/street name if available
@@ -42,7 +62,7 @@ export function useAddressSearch() {
     }
     
     return parts.join(', ');
-  };
+  }, []);
 
   const searchAddressByGeolocation = useCallback(async (latitude: number, longitude: number): Promise<GeocodingResult[]> => {
     setIsLoading(true);
@@ -55,7 +75,7 @@ export function useAddressSearch() {
           },
         }
       );
-      const data = await response.json();
+      const data = await response.json() as NominatimResponse;
       // Convert reverse geocoding result to match GeocodingResult format
       const result: GeocodingResult = {
         place_id: data.place_id,
@@ -74,10 +94,10 @@ export function useAddressSearch() {
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [formatDisplayName]);
 
-  const debouncedSearch = useCallback(
-    debounce(async (query: string) => {
+  const searchAddress = useCallback((query: string) => {
+    const search = async (query: string) => {
       if (!query.trim()) {
         clearSuggestions();
         return;
@@ -95,10 +115,14 @@ export function useAddressSearch() {
             },
           }
         );
-        const data = await response.json();
-        const formattedResults = data.map((item: any) => ({
-          ...item,
+        const data = await response.json() as NominatimResponse[];
+        const formattedResults: GeocodingResult[] = data.map((item) => ({
+          place_id: item.place_id,
+          lat: item.lat,
+          lon: item.lon,
           display_name: formatDisplayName(item.address),
+          type: item.type,
+          importance: item.importance || 0,
         }));
         setSuggestions(formattedResults);
       } catch (error) {
@@ -107,13 +131,11 @@ export function useAddressSearch() {
       } finally {
         setIsLoading(false);
       }
-    }, 300),
-    [clearSuggestions]
-  );
+    };
 
-  const searchAddress = useCallback((query: string) => {
+    const debouncedSearch = debounce(search, 300);
     debouncedSearch(query);
-  }, [debouncedSearch]);
+  }, [clearSuggestions, formatDisplayName]);
 
   return {
     suggestions,

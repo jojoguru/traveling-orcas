@@ -30,7 +30,6 @@ export function LanguageSwitcher() {
     return null;
   }
 
-  const currentLang = languages[i18n.language as keyof typeof languages] || languages.en;
   const nextLang = languages[
     Object.keys(languages)[
       (Object.keys(languages).indexOf(i18n.language) + 1) % Object.keys(languages).length

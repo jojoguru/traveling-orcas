@@ -3,6 +3,7 @@
 import i18next from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
+import { getInitialLanguage } from './utils';
 
 const resources = {
   en: {
@@ -153,34 +154,38 @@ const resources = {
   },
 };
 
-const i18nConfig = {
-  resources,
-  lng: typeof window !== 'undefined' ? localStorage.getItem('preferredLanguage') || 'en' : 'en', // Use stored language or default to 'en'
-  fallbackLng: 'en',
-  interpolation: {
-    escapeValue: false,
-  },
-  // Disable suspense mode for SSR
-  react: {
-    useSuspense: false
+let isInitialized = false;
+
+const initI18next = async () => {
+  if (isInitialized) {
+    return;
   }
-};
 
-// Initialize i18next instance
-i18next
-  .use(initReactI18next)
-  .init(i18nConfig);
-
-// Only use language detector on the client side
-if (typeof window !== 'undefined') {
-  i18next
+  await i18next
+    .use(initReactI18next)
     .use(LanguageDetector)
     .init({
+      resources,
+      lng: getInitialLanguage(),
+      fallbackLng: 'en',
+      interpolation: {
+        escapeValue: false,
+      },
       detection: {
         order: ['localStorage', 'navigator'],
         lookupLocalStorage: 'preferredLanguage',
+        caches: ['localStorage'],
+      },
+      // Disable suspense mode for SSR
+      react: {
+        useSuspense: false,
       },
     });
-}
+
+  isInitialized = true;
+};
+
+// Initialize i18next
+initI18next();
 
 export default i18next; 

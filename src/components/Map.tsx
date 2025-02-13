@@ -13,6 +13,7 @@ import L from 'leaflet';
 import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
 import markerIcon from 'leaflet/dist/images/marker-icon.png';
 import markerShadow from 'leaflet/dist/images/marker-shadow.png';
+import Image from 'next/image';
 
 // Create custom smaller icon
 const customIcon = new L.Icon({
@@ -124,7 +125,7 @@ export default function Map() {
           <Popup className="rounded-lg shadow-lg">
             <div className="text-sm space-y-2">
               <div className="aspect-w-16 aspect-h-9 -mx-2 -mt-2 mb-2">
-                <img
+                <Image
                   src={entry.photo_url}
                   alt={t('map.photoBy', { name: entry.name })}
                   className="rounded-t-lg object-cover w-full h-full"

@@ -3,7 +3,7 @@ import { Entry, entrySchema } from '../supabase/types';
 import { useStore } from '../store/useStore';
 
 export function useEntries() {
-  return useQuery({
+  return useQuery<Entry[]>({
     queryKey: ['entries'],
     queryFn: async () => {
       const response = await fetch('/api/entries');
@@ -18,7 +18,7 @@ export function useEntries() {
 }
 
 export function useEntriesByOrca(orcaId: string) {
-  return useQuery({
+  return useQuery<Entry[]>({
     queryKey: ['entries', 'orca', orcaId],
     queryFn: async () => {
       const response = await fetch(`/api/entries?orca=${encodeURIComponent(orcaId)}`);

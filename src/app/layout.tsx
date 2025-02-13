@@ -3,8 +3,8 @@ import './globals.css';
 import { Inter } from 'next/font/google';
 import Providers from '@/components/Providers';
 import TabNavigation from '@/components/TabNavigation';
-import '@/lib/i18n/client';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
+import { getInitialLanguage } from '@/lib/i18n/utils';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -22,8 +22,10 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const initialLang = getInitialLanguage();
+  
   return (
-    <html lang="en">
+    <html lang={initialLang}>
       <body className={`${inter.className} bg-primary-light min-h-screen`}>
         <Providers>
           <div className="min-h-screen bg-gradient-to-b from-background-blue to-primary-light pb-[76px]">

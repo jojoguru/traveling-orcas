@@ -60,6 +60,7 @@ export default function VerifyPage() {
       window.location.href = callbackUrl;
     } catch (err) {
       setError(t('errors.auth.unknown'));
+      console.error('Verification error:', err);
     } finally {
       setIsLoading(false);
     }

@@ -1,11 +1,10 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import '@/lib/i18n/client';
 import { useCreateEntry } from '@/lib/hooks/useEntries';
-import { useAddressSearch } from '@/lib/hooks/useAddressSearch';
 import { useStore } from '@/lib/store/useStore';
 import { GeocodingResult } from '@/lib/types/geocoding';
 import Image from 'next/image';
