@@ -12,7 +12,7 @@ import { LocationSelect } from './LocationSelect';
 import { PhotoUpload } from './PhotoUpload';
 
 export default function EntryForm() {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const router = useRouter();
   const searchParams = useSearchParams();
   const [isLoading, setIsLoading] = useState(true);

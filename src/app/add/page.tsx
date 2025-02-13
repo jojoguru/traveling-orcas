@@ -1,12 +1,9 @@
 'use client';
 
 import { Suspense } from 'react';
-import { useTranslation } from 'react-i18next';
 import EntryForm from '@/components/EntryForm';
 
 function AddEntryForm() {
-  const { t } = useTranslation();
-
   return (
     <div className="bg-white rounded-xl shadow-card p-6">
       <EntryForm />
