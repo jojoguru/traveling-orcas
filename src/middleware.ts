@@ -42,7 +42,8 @@ export async function middleware(request: NextRequest) {
 
 function redirectToLogin(request: NextRequest) {
   const loginUrl = new URL('/auth/login', request.url);
-  loginUrl.searchParams.set('callbackUrl', request.nextUrl.pathname);
+  // Include both pathname and search params in the callback URL
+  loginUrl.searchParams.set('callbackUrl', request.nextUrl.pathname + request.nextUrl.search);
   return NextResponse.redirect(loginUrl);
 }
 

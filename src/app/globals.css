@@ -1,4 +1,83 @@
+/* Custom Fonts */
+@font-face {
+  font-family: 'Quicksand';
+  src: url('/fonts/Quicksand/Quicksand-VariableFont_wght.ttf') format('truetype-variations');
+  font-weight: 300 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Lora';
+  src: url('/fonts/Lora/Lora-VariableFont_wght.ttf') format('truetype-variations');
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Lora';
+  src: url('/fonts/Lora/Lora-Italic-VariableFont_wght.ttf') format('truetype-variations');
+  font-weight: 400 700;
+  font-style: italic;
+  font-display: swap;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-dark text-white font-sans;
+  }
+}
+
+@layer components {
+  .glass-card {
+    @apply bg-glass backdrop-blur-xl border border-glass-border rounded-xl shadow-card;
+  }
+
+  .glass-button {
+    @apply bg-glass hover:bg-glass-hover backdrop-blur-xl border border-glass-border rounded-lg px-4 py-2 text-white transition-all duration-200;
+  }
+
+  .glass-dropdown {
+    @apply bg-glass backdrop-blur-xl border border-glass-border rounded-lg shadow-card;
+  }
+
+  .glass-dropdown-item {
+    @apply px-4 py-2 hover:bg-glass-hover text-white cursor-pointer transition-colors duration-200;
+  }
+
+  .glass-input {
+    @apply bg-glass backdrop-blur-xl border border-glass-border rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-glass-border;
+  }
+
+  .glass-tab {
+    @apply px-4 py-2 rounded-lg transition-all duration-200;
+  }
+
+  .glass-tab.active {
+    @apply bg-glass-hover text-white;
+  }
+}
+
+/* Custom scrollbar for webkit browsers */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-dark;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-glass-border rounded;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-glass-hover;
+}
 

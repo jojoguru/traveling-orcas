@@ -5,9 +5,7 @@ import EntryForm from '@/components/EntryForm';
 
 function AddEntryForm() {
   return (
-    <div className="bg-white rounded-xl shadow-card p-6">
-      <EntryForm />
-    </div>
+    <EntryForm />
   );
 }
 

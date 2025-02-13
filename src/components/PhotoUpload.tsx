@@ -6,20 +6,21 @@ interface PhotoUploadProps {
   onChange: (file: File | null) => void;
   error?: string;
   disabled?: boolean;
+  orcaName: string;
 }
 
-export function PhotoUpload({ photo, onChange, error, disabled }: PhotoUploadProps) {
+export function PhotoUpload({ photo, onChange, error, disabled, orcaName }: PhotoUploadProps) {
   const { t } = useTranslation();
 
   return (
-    <div className="space-y-1">
-      <label htmlFor="photo" className="block text-sm font-medium text-text">
+    <div className="space-y-2">
+      <label htmlFor="photo" className="block text-sm font-medium text-white/90">
         Photo
       </label>
       <label
         htmlFor="photo"
-        className={`mt-1 block border-2 rounded-lg transition-colors cursor-pointer ${
-          error ? 'border-red-500' : photo ? 'border-gray-200' : 'border-dashed border-gray-200 hover:border-primary'
+        className={`block transition-colors cursor-pointer ${
+          error ? 'border-red-500' : photo ? 'glass-card' : 'glass-card hover:border-white/30'
         }`}
       >
         {photo ? (
@@ -31,17 +32,17 @@ export function PhotoUpload({ photo, onChange, error, disabled }: PhotoUploadPro
               className="object-cover"
               onLoad={() => URL.revokeObjectURL(URL.createObjectURL(photo))}
             />
-            <div className="absolute inset-0 flex items-center justify-center transition-all duration-200 group-hover:bg-black/50">
-              <span className="px-8 py-2 text-white opacity-0 transition-opacity duration-200 group-hover:opacity-100 text-sm">
+            <div className="absolute inset-0 flex items-center justify-center bg-black/0 group-hover:bg-black/60 transition-all duration-200">
+              <span className="text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-sm">
                 {t('form.uploadDifferentPhoto')}
               </span>
             </div>
           </div>
         ) : (
           <div className="px-6 pt-5 pb-6">
-            <div className="space-y-1 text-center">
+            <div className="space-y-2 text-center">
               <svg
-                className={`mx-auto h-12 w-12 ${error ? 'text-red-400' : 'text-gray-400'}`}
+                className={`mx-auto h-12 w-12 ${error ? 'text-red-400' : 'text-white/50'}`}
                 stroke="currentColor"
                 fill="none"
                 viewBox="0 0 48 48"
@@ -54,10 +55,12 @@ export function PhotoUpload({ photo, onChange, error, disabled }: PhotoUploadPro
                   strokeLinejoin="round"
                 />
               </svg>
-              <div className="text-sm text-gray-600">
-                <span className="text-primary hover:text-primary-dark">{t('form.uploadPhoto')}</span>
+              <div className="text-sm">
+                <span className="text-white/90 hover:text-white transition-colors">
+                  {t('form.uploadPhoto', { name: orcaName })}
+                </span>
               </div>
-              <p className="text-xs text-gray-500">{t('form.photoFormats')}</p>
+              <p className="text-xs text-white/50">{t('form.photoFormats')}</p>
             </div>
           </div>
         )}
@@ -71,7 +74,7 @@ export function PhotoUpload({ photo, onChange, error, disabled }: PhotoUploadPro
         />
       </label>
       {error && (
-        <p className="mt-1 text-sm text-red-600">{error}</p>
+        <p className="mt-1 text-sm text-red-400">{error}</p>
       )}
     </div>
   );

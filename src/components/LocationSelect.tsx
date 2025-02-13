@@ -57,7 +57,6 @@ export function LocationSelect({ value, onChange, onLocationSelect, error, disab
 
       const { latitude, longitude } = position.coords;
       const result = await searchAddressByGeolocation(latitude, longitude);
-      console.log({result});
       if (result?.[0]) {
         handleLocationSelect(result[0]);
       }
@@ -84,9 +83,7 @@ export function LocationSelect({ value, onChange, onLocationSelect, error, disab
           type="text"
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          className={`mt-1 block w-full rounded-lg border-gray-200 shadow-input focus:border-primary focus:ring-primary pr-12 ${
-            error ? 'border-red-500' : ''
-          }`}
+          className={`glass-input w-full pr-12 ${error ? 'border-red-500' : ''}`}
           disabled={disabled || isLocating}
           placeholder={t('form.searchLocation')}
         />
@@ -94,7 +91,7 @@ export function LocationSelect({ value, onChange, onLocationSelect, error, disab
           type="button"
           onClick={handleCurrentLocation}
           disabled={disabled || isLocating}
-          className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-primary disabled:opacity-50"
+          className="absolute inset-y-0 right-0 pr-3 flex items-center text-white/50 hover:text-white disabled:opacity-50 transition-colors"
         >
           {isLocating ? (
             <svg className="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -109,25 +106,25 @@ export function LocationSelect({ value, onChange, onLocationSelect, error, disab
         </button>
       </div>
       {error && (
-        <p className="mt-1 text-sm text-red-600">{error}</p>
+        <p className="mt-1 text-sm text-red-400">{error}</p>
       )}
       {geolocationError && (
-        <p className="mt-1 text-sm text-red-600">{geolocationError}</p>
+        <p className="mt-1 text-sm text-red-400">{geolocationError}</p>
       )}
       
       {showSuggestions && (suggestions.length > 0 || isLoading) && (
         <div
           ref={suggestionsRef}
-          className="absolute z-10 w-full mt-1 bg-white rounded-lg shadow-lg max-h-60 overflow-auto border border-gray-100"
+          className="glass-dropdown absolute z-10 w-full mt-1 max-h-60 overflow-auto"
         >
           {isLoading ? (
-            <div className="p-4 text-text-light">Loading...</div>
+            <div className="p-4 text-white/70">Loading...</div>
           ) : (
             <ul className="py-1">
               {suggestions.map((result) => (
                 <li
                   key={result.place_id}
-                  className="px-4 py-2 hover:bg-primary-light cursor-pointer text-sm"
+                  className="glass-dropdown-item"
                   onClick={() => handleLocationSelect(result)}
                 >
                   {result.display_name}

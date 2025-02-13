@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import { GeocodingResult } from '../types/geocoding';
 import debounce from 'lodash/debounce';
 
@@ -96,46 +96,50 @@ export function useAddressSearch() {
     }
   }, [formatDisplayName]);
 
+  const performSearch = useCallback(async (query: string) => {
+    if (!query.trim()) {
+      clearSuggestions();
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const response = await fetch(
+        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
+          query
+        )}&limit=5&addressdetails=1`,
+        {
+          headers: {
+            'Accept-Language': 'de', // Prefer German results
+          },
+        }
+      );
+      const data = await response.json() as NominatimResponse[];
+      const formattedResults: GeocodingResult[] = data.map((item) => ({
+        place_id: item.place_id,
+        lat: item.lat,
+        lon: item.lon,
+        display_name: formatDisplayName(item.address),
+        type: item.type,
+        importance: item.importance || 0,
+      }));
+      setSuggestions(formattedResults);
+    } catch (error) {
+      console.error('Error fetching address suggestions:', error);
+      setSuggestions([]);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [formatDisplayName, clearSuggestions]);
+
+  const debouncedSearch = useMemo(
+    () => debounce(performSearch, 1000),
+    [performSearch]
+  );
+
   const searchAddress = useCallback((query: string) => {
-    const search = async (query: string) => {
-      if (!query.trim()) {
-        clearSuggestions();
-        return;
-      }
-
-      setIsLoading(true);
-      try {
-        const response = await fetch(
-          `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
-            query
-          )}&limit=5&addressdetails=1`,
-          {
-            headers: {
-              'Accept-Language': 'de', // Prefer German results
-            },
-          }
-        );
-        const data = await response.json() as NominatimResponse[];
-        const formattedResults: GeocodingResult[] = data.map((item) => ({
-          place_id: item.place_id,
-          lat: item.lat,
-          lon: item.lon,
-          display_name: formatDisplayName(item.address),
-          type: item.type,
-          importance: item.importance || 0,
-        }));
-        setSuggestions(formattedResults);
-      } catch (error) {
-        console.error('Error fetching address suggestions:', error);
-        setSuggestions([]);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    const debouncedSearch = debounce(search, 300);
     debouncedSearch(query);
-  }, [clearSuggestions, formatDisplayName]);
+  }, [debouncedSearch]);
 
   return {
     suggestions,

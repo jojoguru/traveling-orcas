@@ -74,7 +74,7 @@ export default function Map() {
     <MapContainer
       center={center}
       zoom={selectedEntry ? 12 : 2}
-      className="h-[500px] md:h-[600px] lg:h-[800px] w-full rounded-lg shadow-lg"
+      className="h-[calc(100vh-256px)] w-full rounded-lg shadow-lg"
       zoomControl={false} // Move zoom control to right side
     >
       <TileLayer

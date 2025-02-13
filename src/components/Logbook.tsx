@@ -18,7 +18,7 @@ export default function Logbook() {
     const orcaId = sessionStorage.getItem('orcaId');
     setCurrentOrcaId(orcaId);
   }, []);
-
+  
   // If no orca is selected, show a message
   if (!currentOrcaId) {
     return (
@@ -31,7 +31,7 @@ export default function Logbook() {
   if (isLoading) {
     return (
       <div className="space-y-6">
-        <h2 className="text-2xl font-semibold text-text">{t('logbook.title')}</h2>
+        <h2 className="text-2xl text-white">{t('logbook.title')}</h2>
         <div className="animate-pulse space-y-6">
           {[...Array(3)].map((_, i) => (
             <div key={i} className="bg-gray-100 h-48 rounded-lg" />
@@ -59,7 +59,7 @@ export default function Logbook() {
 
   return (
     <div className="space-y-6">
-      <h2 className="text-2xl font-semibold text-text">{t('logbook.title')}</h2>
+      <h2 className="text-2xl font-semibold text-white">{t('logbook.title')}</h2>
       <div className="space-y-6">
         {entries?.map((entry: Entry) => (
           <EntryCard
