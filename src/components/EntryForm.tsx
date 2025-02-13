@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import '@/lib/i18n/client';
-import { useCreateEntry } from '@/lib/hooks/useEntries';
+import { useCreateEntry, useEntryCountByOrca } from '@/lib/hooks/useEntries';
 import { useStore } from '@/lib/store/useStore';
 import { GeocodingResult } from '@/lib/types/geocoding';
 import Image from 'next/image';
@@ -12,7 +12,7 @@ import { LocationSelect } from './LocationSelect';
 import { PhotoUpload } from './PhotoUpload';
 
 export default function EntryForm() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const router = useRouter();
   const searchParams = useSearchParams();
   const [isLoading, setIsLoading] = useState(true);
@@ -35,6 +35,7 @@ export default function EntryForm() {
   const [showSuccess, setShowSuccess] = useState(false);
   
   const createEntry = useCreateEntry();
+  const { data: entryCount = 0 } = useEntryCountByOrca(orcaId);
   const isSubmitting = useStore((state) => state.isSubmitting);
 
   // Handle orcaId from URL or sessionStorage
@@ -115,6 +116,14 @@ export default function EntryForm() {
     }
   };
 
+  const getEntryMessage = (count: number) => {
+    const nextCount = count + 1; // Since this will be the next entry
+    if (nextCount === 1) return t('welcome.firstEntry');
+    if (nextCount === 2) return t('welcome.secondEntry');
+    if (nextCount === 3) return t('welcome.thirdEntry');
+    return t('welcome.nthEntry', { count: nextCount });
+  };
+
   if (isLoading) {
     return (
       <div className="space-y-6 animate-pulse">
@@ -174,7 +183,7 @@ export default function EntryForm() {
 
       <div className="text-center space-y-4 mb-8">
         <h1 className="text-2xl font-bold text-text">{t('welcome.thanks')}</h1>
-        <p className="text-xl text-text">Du bist der Erste, der</p>
+        <p className="text-xl text-text">{getEntryMessage(entryCount)}</p>
         <div className="relative">
           <div className="bg-primary rounded-full w-64 h-64 mx-auto flex items-center justify-center overflow-hidden">
             <Image

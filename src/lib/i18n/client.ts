@@ -25,6 +25,9 @@ const resources = {
       welcome: {
         thanks: 'THANK YOU!',
         firstEntry: 'You are the first one to catch',
+        secondEntry: 'You are the second one to catch',
+        thirdEntry: 'You are the third one to catch',
+        nthEntry: 'You are the {{count}}th one to catch',
         shareWorld: 'Show the ORCA your world and share it with other ORCA colleagues!'
       },
       logbook: {
@@ -98,6 +101,9 @@ const resources = {
       welcome: {
         thanks: 'DANKE!',
         firstEntry: 'Du bist der Erste, der',
+        secondEntry: 'Du bist der Zweite, der',
+        thirdEntry: 'Du bist der Dritte, der',
+        nthEntry: 'Du bist der {{count}}., der',
         shareWorld: 'Zeig\' dem ORCA deine Welt und teile es mit den anderen ORCAS-Kollegen!'
       },
       logbook: {
@@ -176,9 +182,8 @@ export async function initI18n() {
         lookupLocalStorage: 'preferredLanguage',
         caches: ['localStorage'],
       },
-      // Disable suspense mode for SSR
       react: {
-        useSuspense: false,
+        useSuspense: true,
       },
     });
 

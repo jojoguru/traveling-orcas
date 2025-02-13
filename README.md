@@ -55,74 +55,8 @@ A web application for tracking and sharing ORCA figure travels around the world.
 ## Database Setup
 
 Create the following tables in your Supabase database:
+[View the full schema](docs/schema.sql)
 
-```sql
--- Entries table for ORCA sightings
-create table entries (
-  id uuid default uuid_generate_v4() primary key,
-  name text not null,
-  company text not null,
-  orca_id text not null,
-  location text not null,
-  message text not null,
-  photo_url text not null,
-  coordinates jsonb not null,
-  created_at timestamp with time zone default timezone('utc'::text, now()) not null
-);
-
--- Authentication codes table
-create table auth_codes (
-  id uuid default uuid_generate_v4() primary key,
-  email text not null,
-  code text not null,
-  expires_at timestamp with time zone not null,
-  created_at timestamp with time zone default timezone('utc'::text, now()) not null
-);
-
--- Sessions table
-create table sessions (
-  id uuid default uuid_generate_v4() primary key,
-  email text not null,
-  expires_at timestamp with time zone not null,
-  created_at timestamp with time zone default timezone('utc'::text, now()) not null
-);
-
--- Enable Row Level Security
-alter table entries enable row level security;
-alter table auth_codes enable row level security;
-alter table sessions enable row level security;
-
--- Entries policies
-create policy "Allow public read access"
-  on entries for select
-  using (true);
-
-create policy "Allow authenticated insert"
-  on entries for insert
-  with check (true);
-
--- Auth codes policies
-create policy "Allow insert auth codes"
-  on auth_codes for insert
-  with check (true);
-
-create policy "Allow read own auth codes"
-  on auth_codes for select
-  using (true);
-
-create policy "Allow delete own auth codes"
-  on auth_codes for delete
-  using (true);
-
--- Sessions policies
-create policy "Allow insert sessions"
-  on sessions for insert
-  with check (true);
-
-create policy "Allow read own sessions"
-  on sessions for select
-  using (true);
-```
 
 ## Authentication Flow
 

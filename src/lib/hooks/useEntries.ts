@@ -81,4 +81,20 @@ export function useCreateEntry() {
       queryClient.invalidateQueries({ queryKey: ['entries'] });
     },
   });
+}
+
+export function useEntryCountByOrca(orcaId: string) {
+  return useQuery<number>({
+    queryKey: ['entries', 'count', 'orca', orcaId],
+    queryFn: async () => {
+      const response = await fetch(`/api/entries/count?orca=${encodeURIComponent(orcaId)}`);
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message || 'Failed to fetch entry count');
+      }
+      const data = await response.json();
+      return data.count;
+    },
+    enabled: Boolean(orcaId), // Only run the query if orcaId is provided
+  });
 } 

@@ -8,8 +8,7 @@ function AddEntryForm() {
   const { t } = useTranslation();
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-8">{t('add.title')}</h1>
+    <div className="bg-white rounded-xl shadow-card p-6">
       <EntryForm />
     </div>
   );
