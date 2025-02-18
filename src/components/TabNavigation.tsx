@@ -1,8 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { QrCodeIcon, MapIcon, BookOpenIcon, EllipsisVerticalIcon } from '@heroicons/react/24/outline';
+import { usePathname, useRouter } from 'next/navigation';
+import { QrCodeIcon, MapIcon, BookOpenIcon, EllipsisVerticalIcon, ArrowRightOnRectangleIcon } from '@heroicons/react/24/outline';
 import { useEffect, useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { LanguageSwitcher } from './LanguageSwitcher';
@@ -10,6 +10,7 @@ import '@/lib/i18n/client';
 
 export default function TabNavigation() {
   const { t } = useTranslation();
+  const router = useRouter();
   const pathname = usePathname();
   const [addEntryHref, setAddEntryHref] = useState('/add');
   const [isOptionsOpen, setIsOptionsOpen] = useState(false);
@@ -31,6 +32,26 @@ export default function TabNavigation() {
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
+
+  const handleLogout = async () => {
+    try {
+      // Call logout endpoint to clear session cookie
+      const response = await fetch('/api/auth/logout', {
+        method: 'POST',
+      });
+
+      if (!response.ok) {
+        throw new Error('Logout failed');
+      }
+      
+      // Redirect to login page
+      router.push('/auth/login');
+    } catch (error) {
+      console.error('Logout error:', error);
+      // Still redirect to login page even if the logout request fails
+      router.push('/auth/login');
+    }
+  };
 
   // Hide navigation on auth pages
   if (pathname?.startsWith('/auth')) {
@@ -89,11 +110,19 @@ export default function TabNavigation() {
                 <div className="absolute bottom-full right-0 mb-2 w-48">
                   <div className="glass-card p-2">
                     <div className="mb-2 px-3 py-2 text-xs font-medium text-white/50 uppercase">
-                      Language
+                      {t('common.language')}
                     </div>
                     <div className="px-2">
                       <LanguageSwitcher />
                     </div>
+                    <div className="h-px bg-glass-border my-2" />
+                    <button
+                      onClick={handleLogout}
+                      className="w-full px-3 py-2 text-left flex items-center space-x-3 rounded hover:bg-glass-hover transition-colors text-white/70 hover:text-white"
+                    >
+                      <ArrowRightOnRectangleIcon className="h-5 w-5" />
+                      <span className="font-medium text-sm">{t('auth.signOut')}</span>
+                    </button>
                   </div>
                 </div>
               )}

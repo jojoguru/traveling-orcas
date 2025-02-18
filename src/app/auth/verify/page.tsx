@@ -1,7 +1,9 @@
 'use client';
 
-import { useState, useEffect, Suspense } from 'react';
+import { useState, useEffect, Suspense, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
+import { LanguageSwitcher } from '@/components/LanguageSwitcher';
+import { GlobeAltIcon } from '@heroicons/react/24/outline';
 
 function VerifyForm() {
   const { t } = useTranslation();
@@ -11,6 +13,8 @@ function VerifyForm() {
   const [email, setEmail] = useState<string | null>(null);
   const [callbackUrl, setCallbackUrl] = useState<string>('/');
   const [mounted, setMounted] = useState(false);
+  const [isLangOpen, setIsLangOpen] = useState(false);
+  const langMenuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setMounted(true);
@@ -27,6 +31,17 @@ function VerifyForm() {
     if (storedCallback) {
       setCallbackUrl(storedCallback);
     }
+  }, []);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (langMenuRef.current && !langMenuRef.current.contains(event.target as Node)) {
+        setIsLangOpen(false);
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -66,19 +81,8 @@ function VerifyForm() {
     }
   };
 
-  // Show a simple loading state during SSR/before hydration
   if (!mounted) {
-    return (
-      <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-md w-full space-y-8">
-          <div>
-            <h2 className="mt-6 text-center text-3xl font-extrabold text-text">
-              Enter verification code
-            </h2>
-          </div>
-        </div>
-      </div>
-    );
+    return null;
   }
 
   if (!email) {
@@ -86,55 +90,84 @@ function VerifyForm() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
-        <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-text">
+    <div className="min-h-[80vh] flex flex-col items-center justify-center relative">
+      {/* Language Switcher Dropdown - Top Right */}
+      <div className="absolute top-4 right-4">
+        <div className="relative" ref={langMenuRef}>
+          <button
+            onClick={() => setIsLangOpen(!isLangOpen)}
+            className="glass-button p-2"
+            aria-label="Toggle language menu"
+          >
+            <GlobeAltIcon className="h-6 w-6" />
+          </button>
+
+          {isLangOpen && (
+            <div className="absolute right-0 mt-2 w-48">
+              <div className="glass-card p-2">
+                <div className="mb-2 px-3 py-2 text-xs font-medium text-white/50 uppercase">
+                  {t('common.language')}
+                </div>
+                <div className="px-2">
+                  <LanguageSwitcher onSelect={() => setIsLangOpen(false)} />
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      <div className="w-full max-w-md space-y-8">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-white">
             {t('auth.enterCode')}
-          </h2>
-          <p className="mt-2 text-center text-sm text-text-light">
+          </h1>
+          <p className="mt-2 text-white/70">
             {t('auth.codeInstructions')}
-          </p>
-          <p className="mt-1 text-center text-sm text-text-light">
-            {email}
+            <span className="text-white/80 font-light ml-1">
+              ({email})
+            </span>
           </p>
         </div>
 
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          <div>
-            <label htmlFor="code" className="sr-only">
+        <form onSubmit={handleSubmit} className="mt-8 space-y-6">
+          <div className="space-y-2">
+            <label htmlFor="code" className="block text-sm font-medium text-white/90">
               {t('form.code')}
             </label>
-            <input
-              id="code"
-              name="code"
-              type="text"
-              required
-              className="appearance-none rounded-lg relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-text focus:outline-none focus:ring-primary focus:border-primary focus:z-10 sm:text-sm"
-              placeholder={t('form.code')}
-              value={code}
-              onChange={(e) => setCode(e.target.value)}
-              disabled={isLoading}
-              pattern="[0-9]{6}"
-              maxLength={6}
-              inputMode="numeric"
-              autoComplete="one-time-code"
-            />
+            <div className="relative">
+              <input
+                id="code"
+                name="code"
+                type="text"
+                required
+                className="glass-input w-full pr-4 py-3 text-white placeholder-white/30 bg-glass backdrop-blur-xl text-center tracking-[0.5em] text-lg"
+                style={{ WebkitAppearance: 'none' }}
+                placeholder="000000"
+                value={code}
+                onChange={(e) => setCode(e.target.value)}
+                disabled={isLoading}
+                pattern="[0-9]{6}"
+                maxLength={6}
+                inputMode="numeric"
+                autoComplete="one-time-code"
+              />
+            </div>
           </div>
 
           {error && (
-            <p className="text-sm text-red-600 text-center">{error}</p>
+            <div className="glass-card border-red-500/50 p-4">
+              <p className="text-sm text-red-400">{error}</p>
+            </div>
           )}
 
-          <div>
-            <button
-              type="submit"
-              disabled={isLoading || code.length !== 6}
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-primary hover:enabled:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {isLoading ? t('auth.verifying') : t('auth.verify')}
-            </button>
-          </div>
+          <button
+            type="submit"
+            disabled={isLoading || code.length !== 6}
+            className="glass-button w-full py-3 text-lg font-medium disabled:opacity-50"
+          >
+            {isLoading ? t('auth.verifying') : t('auth.verify')}
+          </button>
         </form>
       </div>
     </div>
@@ -144,16 +177,16 @@ function VerifyForm() {
 // Loading fallback component
 function VerifyLoading() {
   return (
-    <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
-        <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-text">
-            Enter verification code
-          </h2>
-          <div className="mt-8 space-y-6 animate-pulse">
-            <div className="h-10 bg-gray-200 rounded-lg w-full"></div>
-            <div className="h-10 bg-gray-200 rounded-lg w-full"></div>
-          </div>
+    <div className="min-h-[80vh] flex items-center justify-center">
+      <div className="w-full max-w-md space-y-8">
+        <div className="text-center space-y-4">
+          <div className="h-8 bg-glass rounded-lg w-48 mx-auto"></div>
+          <div className="h-4 bg-glass rounded-lg w-64 mx-auto"></div>
+          <div className="h-4 bg-glass rounded-lg w-32 mx-auto"></div>
+        </div>
+        <div className="space-y-4">
+          <div className="h-12 bg-glass rounded-lg w-full"></div>
+          <div className="h-12 bg-glass rounded-lg w-full"></div>
         </div>
       </div>
     </div>

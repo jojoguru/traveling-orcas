@@ -58,6 +58,7 @@ const resources = {
       },
       auth: {
         signIn: 'Sign In',
+        signOut: 'Sign Out',
         emailInstructions: 'Enter your email to receive a verification code',
         continue: 'Continue',
         sending: 'Sending code...',
@@ -73,6 +74,7 @@ const resources = {
         }
       },
       common: {
+        language: "Language",
         time: "o'clock",
         close: "Close"
       },
@@ -135,6 +137,7 @@ const resources = {
       },
       auth: {
         signIn: 'Anmelden',
+        signOut: 'Abmelden',
         emailInstructions: 'Gib deine E-Mail-Adresse ein, um einen Verifizierungscode zu erhalten',
         continue: 'Weiter',
         sending: 'Code wird gesendet...',
@@ -150,6 +153,7 @@ const resources = {
         }
       },
       common: {
+        language: "Sprache",
         time: "Uhr",
         close: "Schließen"
       },
@@ -212,6 +216,7 @@ const resources = {
       },
       auth: {
         signIn: 'Aanmelde',
+        signOut: 'Abmelde',
         emailInstructions: 'Jiv ding E-Mail-Adress en för ne Prööfzahl ze krijje',
         continue: 'Wigger',
         sending: 'Prööfzahl kütt...',
@@ -227,6 +232,7 @@ const resources = {
         }
       },
       common: {
+        language: "Sproch",
         time: "Uhr",
         close: "Zomache"
       },

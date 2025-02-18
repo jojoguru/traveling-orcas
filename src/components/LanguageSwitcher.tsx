@@ -9,7 +9,11 @@ const languages = {
   kk: { name: 'Kölsch', flag: '⛪️' },
 } as const;
 
-export function LanguageSwitcher() {
+interface LanguageSwitcherProps {
+  onSelect?: () => void;
+}
+
+export function LanguageSwitcher({ onSelect }: LanguageSwitcherProps) {
   const { i18n } = useTranslation();
   const [mounted, setMounted] = useState(false);
 
@@ -20,6 +24,7 @@ export function LanguageSwitcher() {
   const handleLanguageSelect = (lang: keyof typeof languages) => {
     i18n.changeLanguage(lang);
     localStorage.setItem('preferredLanguage', lang);
+    onSelect?.();
   };
 
   // Prevent hydration mismatch by not rendering anything until mounted

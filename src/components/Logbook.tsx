@@ -51,7 +51,7 @@ export default function Logbook() {
 
   if (!entries?.length) {
     return (
-      <div className="text-text-light text-center py-12 bg-gray-50 rounded-lg">
+      <div className="text-white/70 text-center py-12 bg-glass rounded-lg">
         {t('logbook.empty')}
       </div>
     );
