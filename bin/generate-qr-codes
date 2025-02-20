@@ -1,0 +1,74 @@
+#!/bin/bash
+
+# Show usage if --help is provided
+if [ "$1" == "--help" ]; then
+    echo "Usage: $0 [domain]"
+    echo "Generate QR codes for all orcas defined in orca-names.txt"
+    echo ""
+    echo "Arguments:"
+    echo "  domain    The base URL for QR codes"
+    echo ""
+    echo "Example:"
+    echo "  $0 https://orcas.example.com"
+    exit 0
+fi
+
+
+# Check if qrencode is installed
+if ! command -v qrencode &> /dev/null; then
+    echo "Error: qrencode is not installed"
+    echo "Please install it using:"
+    echo "  brew install qrencode    # on macOS"
+    echo "  apt-get install qrencode # on Ubuntu/Debian"
+    exit 1
+fi
+
+# Get domain from argument or use default
+if [ -z "$1" ]; then
+    echo "⚠️ Error: Domain argument is required"
+    echo "Usage: $0 <domain>"
+    echo "Example: $0 https://orcas.example.com"
+    exit 1
+fi
+
+DOMAIN=$1
+# Extract domain name without protocol and clean it for directory name
+DOMAIN_DIR=$(echo "$DOMAIN" | sed -e 's/https\?:\/\///' -e 's/[^a-zA-Z0-9.]/-/g')
+
+# Create domain-specific output directory
+OUTPUT_DIR="var/qr/$DOMAIN_DIR"
+mkdir -p "$OUTPUT_DIR"
+
+# Get the directory where the script is located
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+CONFIG_FILE="$SCRIPT_DIR/orca-names.txt"
+
+# Check if config file exists
+if [ ! -f "$CONFIG_FILE" ]; then
+    echo "⚠️ Error: Configuration file not found at $CONFIG_FILE"
+    exit 1
+fi
+
+echo "Generating QR code for all orcas 🐋 using $CONFIG_FILE..."
+echo "Using domain: $DOMAIN"
+echo "Saving to: $OUTPUT_DIR"
+
+# Read each line from the config file and generate QR code
+while IFS= read -r name || [[ -n "$name" ]]; do
+    # Skip empty lines and lines starting with #
+    [[ -z "$name" || "$name" =~ ^[[:space:]]*# ]] && continue
+    
+    # Remove any whitespace
+    name=$(echo "$name" | tr -d '[:space:]')
+    
+    # Generate QR code
+    qrencode -o "$OUTPUT_DIR/$name.svg" -t svg --size 8 --dpi=300 -l H "$DOMAIN/add?orca=$name"
+    
+    if [ $? -eq 0 ]; then
+        echo "  ✓ Successfully created $OUTPUT_DIR/$name.svg"
+    else
+        echo "  ✗ Failed to create QR code for $name"
+    fi
+done < "$CONFIG_FILE"
+
+echo "✅ Done! QR codes have been generated in $OUTPUT_DIR/"
