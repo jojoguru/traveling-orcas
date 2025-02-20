@@ -27,10 +27,11 @@ export function getEmailTemplate(code: string): {
   html: string;
 } {
   return {
-    subject: 'Your Access Code for Traveling Orcas',
+    subject: 'Your Access Code for Traveling Orcas 🐋',
     html: `
-      <h2>Your Access Code</h2>
+      <h2>Your Access Code for Traveling Orcas 🐋</h2>
       <p>Here is your verification code: <strong>${code}</strong></p>
+      <p>Please enter this code in the app to gain access.</p>
       <p>This code will expire in 15 minutes.</p>
       <p>If you didn't request this code, please ignore this email.</p>
     `,
