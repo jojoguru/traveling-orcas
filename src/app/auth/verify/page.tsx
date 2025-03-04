@@ -103,7 +103,7 @@ function VerifyForm() {
           </button>
 
           {isLangOpen && (
-            <div className="absolute right-0 mt-2 w-48">
+            <div className="absolute right-0 mt-2 w-48 z-50">
               <div className="glass-card p-2">
                 <div className="mb-2 px-3 py-2 text-xs font-medium text-white/50 uppercase">
                   {t('common.language')}

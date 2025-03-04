@@ -5,6 +5,7 @@ import { useSearchParams } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { GlobeAltIcon } from '@heroicons/react/24/outline';
+import Image from 'next/image';
 
 function LoginForm() {
   const { t } = useTranslation();
@@ -79,7 +80,7 @@ function LoginForm() {
   return (
     <div className="min-h-[80vh] flex flex-col items-center justify-center relative">
       {/* Language Switcher Dropdown - Top Right */}
-      <div className="absolute top-4 right-4">
+      <div className="absolute -top-4 -right-4">
         <div className="relative" ref={langMenuRef}>
           <button
             onClick={() => setIsLangOpen(!isLangOpen)}
@@ -90,7 +91,7 @@ function LoginForm() {
           </button>
 
           {isLangOpen && (
-            <div className="absolute right-0 mt-2 w-48">
+            <div className="absolute right-0 mt-2 w-48 z-50">
               <div className="glass-card p-2">
                 <div className="mb-2 px-3 py-2 text-xs font-medium text-white/50 uppercase">
                   {t('common.language')}
@@ -103,12 +104,40 @@ function LoginForm() {
           )}
         </div>
       </div>
-
       <div className="w-full max-w-md space-y-8">
+        <h1 className="text-center text-6xl font-thin wave-text pb-4">Traveling Orcas</h1>
+        
+        {/* App Icon */}
+        <div className="flex justify-center">
+          <div className="w-52 h-52 rounded-full relative overflow-hidden">
+            {/* Ocean background layers */}
+            <div className="absolute inset-0 bg-gradient-to-b from-primary/40 via-primary/20 to-purple-500/10"></div>
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="w-full h-32 bg-gradient-to-b from-transparent via-primary/20 to-transparent animate-pulse" style={{ animationDuration: '4s' }}></div>
+            </div>
+            {/* Glass effect overlay */}
+            <div className="absolute inset-0 bg-glass/20 backdrop-blur-sm"></div>
+            {/* Border */}
+            <div className="absolute inset-0 border border-glass-border rounded-full"></div>
+            {/* Orca image */}
+            <div className="absolute inset-0 p-8">
+              <Image
+                src="/bb-orcas/orca-lying-right.svg"
+                alt="Traveling Orcas"
+                width={256}
+                height={256}
+                className="w-full h-full object-contain"
+                priority
+              />
+            </div>
+          </div>
+        </div>
+
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-white">
+          <h2 className="text-2xl font-bold text-white">
             {t('auth.signIn')}
-          </h1>
+          </h2>
+          
           <p className="mt-2 text-white/70">
             {t('auth.emailInstructions')}
           </p>

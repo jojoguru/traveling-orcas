@@ -10,8 +10,8 @@ export const metadata: Metadata = {
   title: 'Traveling Orcas',
   description: 'Follow the journey of our traveling orcas',
   icons: {
-    icon: '/orca-96.png',
-    apple: '/orca-96.png',
+    icon: '/bb-orcas/orca-round-icon-30px.png',
+    apple: '/bb-orcas/orca-round-icon-30px.png',
   },
 };
 

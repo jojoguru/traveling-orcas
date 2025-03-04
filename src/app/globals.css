@@ -81,3 +81,32 @@
   @apply bg-glass-hover;
 }
 
+/* Wave text animation */
+.wave-text {
+  background: linear-gradient(
+    45deg,
+    rgba(0, 78, 146, 0.8) 0%,
+    rgba(0, 120, 212, 0.8) 25%,
+    rgba(0, 196, 253, 0.8) 50%,
+    rgba(64, 185, 255, 0.8) 75%,
+    rgba(0, 156, 224, 0.8) 100%
+  );
+  background-size: 400% 400%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: wave-gradient 8s ease infinite;
+}
+
+@keyframes wave-gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+

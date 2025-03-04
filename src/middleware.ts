@@ -10,6 +10,11 @@ const publicPaths = [
 ];
 
 export async function middleware(request: NextRequest) {
+  // Allow access to static assets and public images
+  if (request.nextUrl.pathname.startsWith('/bb-orcas/')) {
+    return NextResponse.next();
+  }
+
   // Check if the path is public
   if (publicPaths.some(path => request.nextUrl.pathname.startsWith(path))) {
     return NextResponse.next();
@@ -55,8 +60,9 @@ export const config = {
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
      * - public folder
+     * - bb-orcas folder (public images)
      */
-    '/((?!_next/static|_next/image|favicon.ico|public/).*)',
+    '/((?!_next/static|_next/image|favicon.ico|public/|bb-orcas/).*)',
   ],
 };
 
