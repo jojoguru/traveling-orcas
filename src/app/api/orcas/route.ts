@@ -70,7 +70,6 @@ export async function GET() {
         { status: 500 }
       );
     }
-
     // Validate the response
     const validatedOrcas = data.map((orca) => orcaSchema.parse(orca));
 

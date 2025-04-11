@@ -1,8 +1,7 @@
 import { z } from 'zod';
 
 export const orcaSchema = z.object({
-  id: z.string().uuid(),
-  name: z.string().min(1),
+  name: z.string(),
   created_at: z.string().datetime({ offset: true }),
 });
 

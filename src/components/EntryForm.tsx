@@ -10,6 +10,7 @@ import { GeocodingResult } from '@/lib/types/geocoding';
 import Image from 'next/image';
 import { LocationSelect } from './LocationSelect';
 import { PhotoUpload } from './PhotoUpload';
+import { useOrcaStore } from '@/lib/store/orca';
 
 export default function EntryForm() {
   const { t } = useTranslation();
@@ -37,21 +38,18 @@ export default function EntryForm() {
   const createEntry = useCreateEntry();
   const { data: entryCount = 0 } = useEntryCountByOrca(orcaId);
   const isSubmitting = useStore((state) => state.isSubmitting);
+  const { currentOrcaId, syncFromUrl } = useOrcaStore();
 
-  // Handle orcaId from URL or sessionStorage
   useEffect(() => {
-    const urlOrcaId = searchParams.get('orca');
-    if (urlOrcaId) {
-      setOrcaId(urlOrcaId);
-      sessionStorage.setItem('orcaId', urlOrcaId);
-    } else {
-      const storedOrcaId = sessionStorage.getItem('orcaId');
-      if (storedOrcaId) {
-        setOrcaId(storedOrcaId);
-      }
-    }
+    syncFromUrl();
     setIsLoading(false);
-  }, [searchParams]);
+  }, [syncFromUrl]);
+
+  useEffect(() => {
+    if (currentOrcaId) {
+      setOrcaId(currentOrcaId);
+    }
+  }, [currentOrcaId]);
 
   const handleLocationSelect = (result: GeocodingResult) => {
     setSelectedLocation(result);
@@ -148,10 +146,10 @@ export default function EntryForm() {
           </div>
           <div className="ml-3">
             <h3 className="text-sm font-medium text-red-400">
-              Invalid ORCA ID
+              {t('form.invalidOrcaTitle')}
             </h3>
             <p className="mt-2 text-sm text-red-300">
-              No ORCA ID provided. Please scan the QR code on your ORCA figure.
+              {t('form.invalidOrcaMessage')}
             </p>
           </div>
         </div>

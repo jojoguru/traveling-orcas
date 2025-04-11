@@ -78,7 +78,7 @@ export function EntryCard({ entry, onClick }: EntryCardProps) {
               <div className="absolute inset-0 bg-black/0 group-hover/image:bg-black/30 transition-colors duration-300"></div>
             </div>
 
-            <p className="text-text font-serif italic font-medium">
+            <p className="text-m font-serif italic font-light">
               {entry.message}
             </p>
           </div>

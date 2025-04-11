@@ -21,6 +21,11 @@ const resources = {
         uploadPhoto: 'Upload a photo of {{name}} and you!',
         uploadDifferentPhoto: 'Upload a different photo',
         photoFormats: 'PNG, JPG, GIF up to 10MB',
+        invalidOrcaTitle: 'Invalid ORCA ID',
+        invalidOrcaMessage: 'No ORCA ID provided. Please scan the QR code on your ORCA figure.',
+        gallery: 'Gallery',
+        camera: 'Camera',
+        removePhoto: 'Remove photo'
       },
       welcome: {
         thanks: 'THANK YOU!',
@@ -33,8 +38,9 @@ const resources = {
       },
       logbook: {
         title: 'Logbook',
-        empty: 'This orca is at the very beginning of its journey',
-        noOrcaSelected: 'Please select an orca to view its logbook entries'
+        noEntries: 'This orca is at the very beginning of its journey',
+        noOrcaSelected: 'Please select an orca to view its logbook entries',
+        selectOrca: 'Select an orca'
       },
       map: {
         title: 'Travel Map',
@@ -100,6 +106,11 @@ const resources = {
         uploadPhoto: 'Lad ein Foto von {{name}} und dir hoch!',
         uploadDifferentPhoto: 'Anderes Foto hochladen',
         photoFormats: 'PNG, JPG, GIF bis zu 10MB',
+        invalidOrcaTitle: 'Ungültige ORCA ID',
+        invalidOrcaMessage: 'Keine ORCA ID angegeben. Bitte scanne den QR-Code auf deiner ORCA-Figur.',
+        gallery: 'Galerie',
+        camera: 'Kamera',
+        removePhoto: 'Foto entfernen'
       },
       welcome: {
         thanks: 'DANKE!',
@@ -112,8 +123,9 @@ const resources = {
       },
       logbook: {
         title: 'Logbuch',
-        empty: 'Dieser Orca steht ganz am Anfang seiner Reise',
-        noOrcaSelected: 'Bitte wähle einen Orca aus, um seine Logbucheinträge zu sehen'
+        noEntries: 'Dieser Orca steht ganz am Anfang seiner Reise',
+        noOrcaSelected: 'Bitte wähle einen Orca aus, um seine Logbucheinträge zu sehen',
+        selectOrca: 'Wähle einen Orca aus'
       },
       map: {
         title: 'Reisekarte',
@@ -179,6 +191,11 @@ const resources = {
         uploadPhoto: 'Lad e Foto vun {{name}} un dir huh!',
         uploadDifferentPhoto: 'Ander Foto huhlade',
         photoFormats: 'PNG, JPG, GIF bes 10MB',
+        invalidOrcaTitle: 'ORCA ID es nit jöltich',
+        invalidOrcaMessage: 'Kein ORCA ID enjejovve. Scan dä QR-Code op dingem ORCA-Figürche.',
+        gallery: 'Jalerie',
+        camera: 'Kamera',
+        removePhoto: 'Foto fottschmieße'
       },
       welcome: {
         thanks: 'DANKE SCHÖN!',
@@ -191,8 +208,9 @@ const resources = {
       },
       logbook: {
         title: 'Logboch',
-        empty: 'Dä ORCA es jrad eets am Aanfang vun singer Reis',
-        noOrcaSelected: 'Wähl ene ORCA us, öm sing Logboch ze sinn'
+        noEntries: 'Dä ORCA es jrad eets am Aanfang vun singer Reis',
+        noOrcaSelected: 'Wähl ene ORCA us, öm sing Logboch ze sinn',
+        selectOrca: 'Wähl ene ORCA us'
       },
       map: {
         title: 'Reisskaat',

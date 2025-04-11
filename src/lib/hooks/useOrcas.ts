@@ -35,7 +35,7 @@ export function useOrcas() {
   const setIsSubmitting = useStore((state) => state.setIsSubmitting);
 
   // Query for fetching orcas
-  const { data: orcas, isLoading, error } = useQuery({
+  const { data, isLoading, error } = useQuery<Orca[]>({
     queryKey: ['orcas'],
     queryFn: fetchOrcas,
   });
@@ -56,7 +56,7 @@ export function useOrcas() {
   });
 
   return {
-    orcas,
+    orcas: data ?? [],
     isLoading,
     error,
     createOrca: createOrcaMutation.mutateAsync,

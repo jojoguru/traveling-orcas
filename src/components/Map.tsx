@@ -3,9 +3,8 @@
 import React from 'react';
 import { MapContainer, TileLayer, Marker, Popup, Polyline, useMap } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
-import { useEntries } from '@/lib/hooks/useEntries';
-import { useStore } from '@/lib/store/useStore';
 import { Entry } from '@/lib/supabase/types';
+import { useStore } from '@/lib/store/useStore';
 import { useTranslation } from 'react-i18next';
 
 // Fix for Leaflet marker icons in Next.js
@@ -40,9 +39,12 @@ function MapBounds({ coordinates }: { coordinates: [number, number][] }) {
   return null;
 }
 
-export default function Map() {
+interface MapProps {
+  entries: Entry[];
+}
+
+export default function Map({ entries }: MapProps) {
   const { t, i18n } = useTranslation();
-  const { data: entries } = useEntries();
   const selectedEntry = useStore((state) => state.selectedEntry);
 
   // Calculate center based on entries or default to a central location
@@ -74,7 +76,7 @@ export default function Map() {
     <MapContainer
       center={center}
       zoom={selectedEntry ? 12 : 2}
-      className="h-[calc(100vh-256px)] w-full rounded-lg shadow-lg"
+      className="h-[calc(100vh-256px)] w-full rounded-lg shadow-lg relative z-0"
       zoomControl={false} // Move zoom control to right side
     >
       <TileLayer

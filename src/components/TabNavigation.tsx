@@ -7,19 +7,24 @@ import { useEffect, useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { LanguageSwitcher } from './LanguageSwitcher';
 import '@/lib/i18n/client';
+import { useOrcaStore } from '@/lib/store/orca';
 
 export default function TabNavigation() {
   const { t } = useTranslation();
   const router = useRouter();
   const pathname = usePathname();
   const [addEntryHref, setAddEntryHref] = useState('/add');
+  const [mapHref, setMapHref] = useState('/map');
+  const [logbookHref, setLogbookHref] = useState('/logbook');
   const [isOptionsOpen, setIsOptionsOpen] = useState(false);
   const optionsRef = useRef<HTMLDivElement>(null);
+  const { currentOrcaId } = useOrcaStore();
 
   useEffect(() => {
-    const orcaId = sessionStorage.getItem('orcaId');
-    if (orcaId) {
-      setAddEntryHref(`/add?orca=${orcaId}`);
+    if (currentOrcaId) {
+      setAddEntryHref(`/add?orca=${currentOrcaId}`);
+      setMapHref(`/map?orca=${currentOrcaId}`);
+      setLogbookHref(`/logbook?orca=${currentOrcaId}`);
     }
 
     // Close options when clicking outside
@@ -31,7 +36,7 @@ export default function TabNavigation() {
 
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
+  }, [currentOrcaId]);
 
   const handleLogout = async () => {
     try {
@@ -60,8 +65,8 @@ export default function TabNavigation() {
 
   const tabs = [
     { name: t('navigation.addEntry'), href: addEntryHref, icon: QrCodeIcon },
-    { name: t('navigation.logbook'), href: '/', icon: BookOpenIcon },
-    { name: t('navigation.map'), href: '/map', icon: MapIcon },
+    { name: t('navigation.logbook'), href: logbookHref, icon: BookOpenIcon },
+    { name: t('navigation.map'), href: mapHref, icon: MapIcon },
   ];
 
   return (
