@@ -7,6 +7,7 @@ const publicPaths = [
   '/auth/login',
   '/auth/verify',
   '/auth/error',
+  '/fonts',
 ];
 
 export async function middleware(request: NextRequest) {
@@ -17,6 +18,7 @@ export async function middleware(request: NextRequest) {
 
   // Check if the path is public
   if (publicPaths.some(path => request.nextUrl.pathname.startsWith(path))) {
+    console.log('🔑 [middleware] Public path:', request.nextUrl.pathname);
     return NextResponse.next();
   }
 
@@ -28,6 +30,7 @@ export async function middleware(request: NextRequest) {
   const sessionId = request.cookies.get('session_id')?.value;
   
   if (!sessionId) {
+    console.log('🔑 [middleware] No session ID found', request.nextUrl.pathname);
     return redirectToLogin(request);
   }
   // Verify session

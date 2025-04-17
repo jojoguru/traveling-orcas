@@ -11,6 +11,7 @@ function VerifyForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [email, setEmail] = useState<string | null>(null);
+  const [emailInput, setEmailInput] = useState('');
   const [callbackUrl, setCallbackUrl] = useState<string>('/');
   const [mounted, setMounted] = useState(false);
   const [isLangOpen, setIsLangOpen] = useState(false);
@@ -22,12 +23,9 @@ function VerifyForm() {
     const storedEmail = sessionStorage.getItem('auth_email');
     const storedCallback = sessionStorage.getItem('auth_callback');
 
-    if (!storedEmail) {
-      window.location.href = '/auth/login';
-      return;
+    if (storedEmail) {
+      setEmail(storedEmail);
     }
-
-    setEmail(storedEmail);
     if (storedCallback) {
       setCallbackUrl(storedCallback);
     }
@@ -46,7 +44,8 @@ function VerifyForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email) return;
+    const emailToUse = email || emailInput;
+    if (!emailToUse) return;
 
     setError(null);
     setIsLoading(true);
@@ -57,13 +56,13 @@ function VerifyForm() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email, code }),
+        body: JSON.stringify({ email: emailToUse, code }),
       });
 
       const data = await response.json();
 
       if (!response.ok) {
-        setError(data.error || t('errors.auth.failed'));
+        setError(data.error || t('auth.errors.failed'));
         return;
       }
 
@@ -74,7 +73,7 @@ function VerifyForm() {
       // Redirect to the callback URL
       window.location.href = callbackUrl;
     } catch (err) {
-      setError(t('errors.auth.unknown'));
+      setError(t('auth.errors.unknown'));
       console.error('Verification error:', err);
     } finally {
       setIsLoading(false);
@@ -83,10 +82,6 @@ function VerifyForm() {
 
   if (!mounted) {
     return null;
-  }
-
-  if (!email) {
-    return null; // Will redirect in useEffect
   }
 
   return (
@@ -122,15 +117,43 @@ function VerifyForm() {
           <h1 className="text-2xl font-bold text-white">
             {t('auth.enterCode')}
           </h1>
-          <p className="mt-2 text-white/70">
-            {t('auth.codeInstructions')}
-            <span className="text-white/80 font-light ml-1">
-              ({email})
-            </span>
-          </p>
+          {email ? (
+            <p className="mt-2 text-white/70">
+              {t('auth.codeInstructions')}
+              <span className="text-white/80 font-light ml-1">
+                ({email})
+              </span>
+            </p>
+          ) : (
+            <p className="mt-2 text-white/70">
+              {t('auth.enterEmailAndCode')}
+            </p>
+          )}
         </div>
 
         <form onSubmit={handleSubmit} className="mt-8 space-y-6">
+          {!email && (
+            <div className="space-y-2">
+              <label htmlFor="email" className="block text-sm font-medium text-white/90">
+                {t('form.email')}
+              </label>
+              <div className="relative">
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  required
+                  className="glass-input w-full pr-4 py-3 text-white placeholder-white/30 bg-glass backdrop-blur-xl"
+                  style={{ WebkitAppearance: 'none' }}
+                  placeholder="name@company.com"
+                  value={emailInput}
+                  onChange={(e) => setEmailInput(e.target.value)}
+                  disabled={isLoading}
+                />
+              </div>
+            </div>
+          )}
+
           <div className="space-y-2">
             <label htmlFor="code" className="block text-sm font-medium text-white/90">
               {t('form.code')}
@@ -157,13 +180,13 @@ function VerifyForm() {
 
           {error && (
             <div className="glass-card border-red-500/50 p-4">
-              <p className="text-sm text-red-400">{error}</p>
+              <p className="text-sm text-red-400">{t('auth.errors.invalidCode')}</p>
             </div>
           )}
 
           <button
             type="submit"
-            disabled={isLoading || code.length !== 6}
+            disabled={isLoading || code.length !== 6 || (!email && !emailInput)}
             className="glass-button w-full py-3 text-lg font-medium disabled:opacity-50"
           >
             {isLoading ? t('auth.verifying') : t('auth.verify')}

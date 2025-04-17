@@ -18,8 +18,8 @@ function LoginForm() {
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get('callbackUrl') || '/';
   const fullCallbackUrl = typeof window !== 'undefined' 
-    ? new URL(callbackUrl, window.location.origin).toString()
-    : callbackUrl;
+    ? new URL('/auth/verify?callbackUrl=' + callbackUrl, window.location.origin).toString()
+    : 'https://orcas-united.com/auth/verify?callbackUrl=' + callbackUrl;
 
   useEffect(() => {
     setMounted(true);

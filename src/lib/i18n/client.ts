@@ -54,10 +54,6 @@ const resources = {
         required: 'This field is required',
         upload: 'Error uploading photo',
         submit: 'Error submitting entry',
-        auth: {
-          failed: 'Authentication failed',
-          unknown: 'An unexpected error occurred'
-        },
         geolocation: {
           denied: 'Please allow access to your location in your browser settings to use this feature'
         }
@@ -70,12 +66,13 @@ const resources = {
         sending: 'Sending code...',
         enterCode: 'Enter Verification Code',
         codeInstructions: 'Enter the 6-digit code sent to your email',
+        enterEmailAndCode: 'Enter your email and the verification code',
         verify: 'Verify Code',
         verifying: 'Verifying...',
         errors: {
           failed: 'Authentication failed',
           unknown: 'An unexpected error occurred',
-          invalidCode: 'Invalid or expired code',
+          invalidCode: 'Invalid or expired code for the given email',
           emailNotAllowed: 'Email domain not allowed. Please use a TimeToAct Group email address.',
         }
       },
@@ -139,10 +136,6 @@ const resources = {
         required: 'Dieses Feld ist erforderlich',
         upload: 'Fehler beim Hochladen des Fotos',
         submit: 'Fehler beim Absenden des Eintrags',
-        auth: {
-          failed: 'Authentifizierung fehlgeschlagen',
-          unknown: 'Ein unerwarteter Fehler ist aufgetreten'
-        },
         geolocation: {
           denied: 'Bitte erlaube den Zugriff auf deinen Standort in den Browser-Einstellungen, um diese Funktion zu nutzen'
         }
@@ -155,6 +148,7 @@ const resources = {
         sending: 'Code wird gesendet...',
         enterCode: 'Verifizierungscode eingeben',
         codeInstructions: 'Gib den 6-stelligen Code ein, der an deine E-Mail-Adresse gesendet wurde',
+        enterEmailAndCode: 'Gib deine E-Mail-Adresse und den Verifizierungscode ein',
         verify: 'Code überprüfen',
         verifying: 'Wird überprüft...',
         errors: {
@@ -224,10 +218,6 @@ const resources = {
         required: 'Dat moss de usfölle',
         upload: 'Foto kunnt nit huhjelade wääde',
         submit: 'Dat kunnt nit avjeschick wääde',
-        auth: {
-          failed: 'Aanmeldung hät nit jeklappt',
-          unknown: 'Do es jet schief jejange'
-        },
         geolocation: {
           denied: 'Erlaub d\'r Zogriff op dinge Standort en dinge Browser-Enstellunge'
         }
@@ -240,13 +230,14 @@ const resources = {
         sending: 'Prööfzahl kütt...',
         enterCode: 'Prööfzahl enjävve',
         codeInstructions: 'Jiv de 6-stellije Prööfzahl en, die an ding E-Mail jeschick wood',
+        enterEmailAndCode: 'Jiv ding E-Mail-Adress un de Prööfzahl en',
         verify: 'Prööfzahl pröfe',
         verifying: 'Am pröfe...',
         errors: {
           failed: 'Aanmeldung hät nit jeklappt',
           unknown: 'Do es jet schief jejange',
-          invalidCode: 'Prööfzahl es nit richtich oder afjelaufe',
-          emailNotAllowed: 'E-Mail-Domain es nit zojelajje. Nemm en TimeToAct Group E-Mail-Adress.',
+          invalidCode: 'Prööfzahl es nit richtich oder afjelaufe för die E-Mail-Adress',
+          emailNotAllowed: 'E-Mail-Domain es nit zojelajje. Nemm en TimeToAct Group E-Mail-Adress.'
         }
       },
       common: {
