@@ -22,7 +22,7 @@ export function generateAuthCode(): string {
   return Math.floor(100000 + Math.random() * 900000).toString();
 }
 
-export function getEmailTemplate(code: string): {
+export function getEmailTemplate(code: string, redirectUrl: string): {
   subject: string;
   html: string;
 } {
@@ -31,7 +31,7 @@ export function getEmailTemplate(code: string): {
     html: `
       <h2>Your Access Code for Traveling Orcas 🐋</h2>
       <p>Here is your verification code: <strong>${code}</strong></p>
-      <p>Please enter this code in the app to gain access.</p>
+      <p>Please enter this code in the app under <a href="${redirectUrl}">${redirectUrl}</a> to gain access.</p>
       <p>This code will expire in 15 minutes.</p>
       <p>If you didn't request this code, please ignore this email.</p>
     `,

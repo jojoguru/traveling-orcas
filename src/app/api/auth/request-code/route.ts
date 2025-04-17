@@ -11,7 +11,7 @@ export async function POST(request: Request) {
   console.log('🔒 [auth] Starting auth code request');
   try {
     const body = await request.json();
-    const { email } = body;
+    const { email, redirectUrl } = body;
     console.log('📧 [auth] Received request for email:', email);
 
     if (!email) {
@@ -71,10 +71,9 @@ export async function POST(request: Request) {
 
     // Send email with code
     try {
-      const template = getEmailTemplate(code);
+      const template = getEmailTemplate(code, redirectUrl);
       const to = process.env.EMAIL_DEV_MODE === 'true' ? 'delivered@resend.dev' : email;
       console.log('📨 [auth] Sending email to:', to);
-      
       const emailResponse = await resend.emails.send({
         from: sender,
         to,

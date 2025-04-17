@@ -17,6 +17,9 @@ function LoginForm() {
   const langMenuRef = useRef<HTMLDivElement>(null);
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get('callbackUrl') || '/';
+  const fullCallbackUrl = typeof window !== 'undefined' 
+    ? new URL(callbackUrl, window.location.origin).toString()
+    : callbackUrl;
 
   useEffect(() => {
     setMounted(true);
@@ -44,7 +47,7 @@ function LoginForm() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ email, redirectUrl: fullCallbackUrl }),
       });
 
       const data = await response.json();
