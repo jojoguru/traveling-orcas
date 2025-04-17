@@ -9,21 +9,38 @@ interface PhotoUploadProps {
   orcaName: string;
 }
 
+const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
+
 export function PhotoUpload({ photo, onChange, error, disabled, orcaName }: PhotoUploadProps) {
   const { t } = useTranslation();
 
+  const validateAndHandleFile = (file: File | null) => {
+    if (!file) return;
+
+    // Check file type
+    if (!ACCEPTED_IMAGE_TYPES.includes(file.type)) {
+      onChange(null);
+      return;
+    }
+
+    // Check file size
+    if (file.size > MAX_FILE_SIZE) {
+      onChange(null);
+      return;
+    }
+
+    onChange(file);
+  };
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] || null;
-    if (file) {
-      onChange(file);
-    }
+    validateAndHandleFile(file);
   };
 
   const handleCameraCapture = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] || null;
-    if (file) {
-      onChange(file);
-    }
+    validateAndHandleFile(file);
   };
 
   const renderUploadButtons = () => (
@@ -41,7 +58,7 @@ export function PhotoUpload({ photo, onChange, error, disabled, orcaName }: Phot
         <input
           id="gallery-upload"
           type="file"
-          accept="image/*"
+          accept="image/jpeg,image/png,image/gif,image/webp"
           onChange={handleFileChange}
           className="sr-only"
           disabled={disabled}
@@ -61,7 +78,7 @@ export function PhotoUpload({ photo, onChange, error, disabled, orcaName }: Phot
         <input
           id="camera-upload"
           type="file"
-          accept="image/*"
+          accept="image/jpeg,image/png,image/gif,image/webp"
           capture="environment"
           onChange={handleCameraCapture}
           className="sr-only"
