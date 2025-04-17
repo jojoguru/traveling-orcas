@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import '@/lib/i18n/client';
 import { useCreateEntry, useEntryCountByOrca } from '@/lib/hooks/useEntries';
@@ -15,7 +15,6 @@ import { useOrcaStore } from '@/lib/store/orca';
 export default function EntryForm() {
   const { t } = useTranslation();
   const router = useRouter();
-  const searchParams = useSearchParams();
   const [isLoading, setIsLoading] = useState(true);
   const [name, setName] = useState('');
   const [company, setCompany] = useState('');
