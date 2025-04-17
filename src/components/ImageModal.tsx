@@ -10,9 +10,18 @@ interface ImageModalProps {
   alt: string;
 }
 
+function Loading() {
+  return (
+    <div className="flex items-center justify-center h-[calc(100vh-256px)]">
+      <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+    </div>
+  );
+}
+
 export function ImageModal({ isOpen, onClose, imageUrl, alt }: ImageModalProps) {
   const { t } = useTranslation();
   const [dimensions, setDimensions] = useState({ width: 1920, height: 1080 });
+  const [isLoading, setIsLoading] = useState(true);
   
   return (
     <Dialog
@@ -46,10 +55,13 @@ export function ImageModal({ isOpen, onClose, imageUrl, alt }: ImageModalProps) 
         {/* Image container with aspect ratio preservation */}
         <div className="relative flex items-center justify-center">
           <div className="relative w-auto h-auto">
+            {isLoading && (
+              <Loading />
+            )}
             <Image
               src={imageUrl}
               alt={alt}
-              className="object-contain rounded-lg"
+              className={`object-contain rounded-lg transition-opacity duration-300 ${isLoading ? 'opacity-0' : 'opacity-100'}`}
               width={dimensions.width}
               height={dimensions.height}
               sizes="90vw"
@@ -66,7 +78,9 @@ export function ImageModal({ isOpen, onClose, imageUrl, alt }: ImageModalProps) 
                   width: img.naturalWidth,
                   height: img.naturalHeight
                 });
+                setIsLoading(false);
               }}
+              onLoad={() => setIsLoading(false)}
             />
           </div>
         </div>

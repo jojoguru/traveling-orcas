@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import { useTranslation } from 'react-i18next';
+import { useState } from 'react';
 
 interface PhotoUploadProps {
   photo: File | null;
@@ -14,6 +15,7 @@ const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
 
 export function PhotoUpload({ photo, onChange, error, disabled, orcaName }: PhotoUploadProps) {
   const { t } = useTranslation();
+  const [isLoading, setIsLoading] = useState(true);
 
   const validateAndHandleFile = (file: File | null) => {
     if (!file) return;
@@ -30,6 +32,7 @@ export function PhotoUpload({ photo, onChange, error, disabled, orcaName }: Phot
       return;
     }
 
+    setIsLoading(true);
     onChange(file);
   };
 
@@ -96,12 +99,20 @@ export function PhotoUpload({ photo, onChange, error, disabled, orcaName }: Phot
       {photo ? (
         <div className={`block transition-colors ${error ? 'border-red-500' : 'glass-card'}`}>
           <div className="relative aspect-[4/3] w-full overflow-hidden rounded-lg group">
+            {isLoading && (
+              <div className="absolute inset-0 flex items-center justify-center bg-black/20 backdrop-blur-sm">
+                <div className="w-10 h-10 border-3 border-white/20 border-t-white/90 rounded-full animate-spin" />
+              </div>
+            )}
             <Image
               src={URL.createObjectURL(photo)}
               alt="Preview"
               fill
-              className="object-cover"
-              onLoad={() => URL.revokeObjectURL(URL.createObjectURL(photo))}
+              className={`object-cover transition-opacity duration-300 ${isLoading ? 'opacity-0' : 'opacity-100'}`}
+              onLoad={() => {
+                URL.revokeObjectURL(URL.createObjectURL(photo));
+                setIsLoading(false);
+              }}
             />
             <button
               onClick={() => onChange(null)}
