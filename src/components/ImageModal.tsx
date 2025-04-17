@@ -1,6 +1,7 @@
 import { Dialog } from '@headlessui/react';
 import Image from 'next/image';
 import { useTranslation } from 'react-i18next';
+import { useState } from 'react';
 
 interface ImageModalProps {
   isOpen: boolean;
@@ -11,6 +12,7 @@ interface ImageModalProps {
 
 export function ImageModal({ isOpen, onClose, imageUrl, alt }: ImageModalProps) {
   const { t } = useTranslation();
+  const [dimensions, setDimensions] = useState({ width: 1920, height: 1080 });
   
   return (
     <Dialog
@@ -19,11 +21,11 @@ export function ImageModal({ isOpen, onClose, imageUrl, alt }: ImageModalProps) 
       className="relative z-50"
     >
       {/* Background overlay */}
-      <div className="fixed inset-0 bg-black" aria-hidden="true" />
+      <div className="fixed inset-0 bg-black/90" aria-hidden="true" />
 
       {/* Full-screen container */}
       <div 
-        className="fixed inset-0 flex items-center justify-center"
+        className="fixed inset-0 flex items-center justify-center p-4"
         onClick={(e) => {
           if (e.target === e.currentTarget) {
             onClose();
@@ -41,18 +43,32 @@ export function ImageModal({ isOpen, onClose, imageUrl, alt }: ImageModalProps) 
           </svg>
         </button>
 
-        {/* Image container - only as large as needed */}
-        <div className="relative w-auto h-auto max-w-[90vw] max-h-[90vh]">
-          <Image
-            src={imageUrl}
-            alt={alt}
-            className="object-contain"
-            width={1920}
-            height={1080}
-            sizes="90vw"
-            priority
-            quality={95}
-          />
+        {/* Image container with aspect ratio preservation */}
+        <div className="relative flex items-center justify-center">
+          <div className="relative w-auto h-auto">
+            <Image
+              src={imageUrl}
+              alt={alt}
+              className="object-contain rounded-lg"
+              width={dimensions.width}
+              height={dimensions.height}
+              sizes="90vw"
+              priority
+              quality={95}
+              style={{
+                maxWidth: '90vw',
+                maxHeight: '90vh',
+                width: 'auto',
+                height: 'auto'
+              }}
+              onLoadingComplete={(img) => {
+                setDimensions({
+                  width: img.naturalWidth,
+                  height: img.naturalHeight
+                });
+              }}
+            />
+          </div>
         </div>
       </div>
     </Dialog>
